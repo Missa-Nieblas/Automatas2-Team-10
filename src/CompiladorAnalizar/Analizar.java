@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-
+ 
 public class Analizar 
 {
 	int renglon=1;
@@ -75,7 +75,7 @@ public class Analizar
 				else
 					if(nodo.anterior.dato.getValor().equals("class")) 
 					{
-						identi.add( new Identificador(to.getValor(), " ", "class", "Global", nodo.dato.getLinea()));
+						identi.add(new Identificador(to.getValor()," ", "class"));
 					}
 				break;
 		
@@ -123,7 +123,7 @@ public class Analizar
 							impresion.add("Error sinatactico en la linea "+to.getLinea()+ " se esperaba una constante");
 						else {
 							if(nodo.anterior.anterior.dato.getTipo()==Token.TIPO_DATO)
-								identi.add(new Identificador(nodo.anterior.dato.getValor(),nodo.siguiente.dato.getValor(),nodo.anterior.anterior.dato.getValor(),"Global",nodo.dato.getLinea()));
+								identi.add(new Identificador(nodo.anterior.dato.getValor(),nodo.siguiente.dato.getValor(),nodo.anterior.anterior.dato.getValor()));			
 						}
 					}else
 							//Por si se llega a repetir
@@ -239,6 +239,27 @@ public class Analizar
 		//por si las moscas 
 		if(nodo!=null) {
 			to = nodo.dato;
+			for(int i=0;i<identi.size();i++) {
+				int cont=0;
+				boolean repetido = false;
+				String bandera= "";
+				bandera=identi.get(i).getNombre();
+				for(int j=0;j<aux.size();j++) {
+					//Para saber si un identificador esta repetido
+					if(aux.get(j).equals(identi.get(i).getNombre())) {
+						repetido=true;
+					}
+				}
+				for(int k=0; k<identi.size();k++) {
+					if(identi.get(k).getNombre().equals(bandera) && !repetido) {
+						cont++;
+						if(cont>1) {
+							impresion.add("Variable repetida en la linea: "+identi.get(k).getPosicion());
+							aux.add(identi.get(k).getNombre());
+						}
+					}
+				}
+				repetido = false;
 			
 			//Metodos para validar la asigancion de datos
 			if(identi.get(i).getTipo().contains("int")) {
@@ -272,6 +293,7 @@ public class Analizar
 		return to;
 	}
 	return vacio;
+	}
 //Metodos para validar los valores por medio de una cadena
 public static boolean isNumeric(String cadena) {
 	try {
@@ -285,7 +307,8 @@ public static boolean isFloat(String cadena) {
 	try {
 		Float.parseFloat(cadena);
 		return true;
-	}catch(NumerFormatException nfe) {
+	}catch(NumberFormatException nfe) 
+	{
 		return false;
 		
 	}
@@ -299,7 +322,7 @@ public static boolean isFloat(String cadena) {
 		}
 	}
 	public static boolean isBoolean(String cadena) {
-		if(cadena.equals("true"))||cadena.equals("false")){
+		if(cadena.equals("true")||cadena.equals("false")){
 			return true;
 		}
 		return false;
@@ -343,12 +366,13 @@ public static boolean isFloat(String cadena) {
 	}
 	//metodo para saber el tipo de dato
 	public String TipoDato(String aux) {
-		if(pattern.matches("[0-9]+",aux))
+		if(Pattern.matches("[0-9]+",aux))
 			return "int";
 		if(Pattern.matches("[0-9+.[0-9]",aux))
 			return "float";
-		if(pattern.macthes("true+",aux))
+		if(Pattern.matches("true+",aux))
 			return "boolean";
+		return"";
 	}
 	public ArrayList<String> getmistokens() {
 		return impresion;
