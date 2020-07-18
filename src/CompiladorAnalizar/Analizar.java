@@ -240,15 +240,74 @@ public class Analizar
 		if(nodo!=null) {
 			to = nodo.dato;
 			
-			//Recorrido de la tabla de simbolos --Serrajero
+			//Metodos para validar la asigancion de datos
+			if(identi.get(i).getTipo().contains("int")) {
+				cadena=identi.get(i).getValor();
+				if(!isNumeric(cadena)) {
+					impresion.add("Error semantico,se esperaba valor flotante en la linea:"+identi.get(i).getPosicion());
+				}
+			}
+			if(identi.get(i).getTipo().contains("float")) {
+				cadena=identi.get(i).getValor();
+				if(!isNumeric(cadena)) {
+					impresion.add("Error semantico,se esperaba valor flotante en la linea:"+identi.get(i).getPosicion());
+				}
+			}
+			if(identi.get(i).getTipo().contains("double")) {
+				cadena=identi.get(i).getValor();
+				if(!isNumeric(cadena)) {
+					impresion.add("Error semantico,se esperaba valor flotante en la linea:"+identi.get(i).getPosicion());
+					
+				}
+			}
+			if(identi.get(i).getTipo().contains("boolean")) {
+				cadena=identi.get(i).getValor();
+				if(!isNumeric(cadena)) {
+					impresion.add("Error semantico,se esperaba valor flotante en la linea:"+identi.get(i).getPosicion());
+					
+				}
+			}
 			
-			////Para saber si un identificador esta repetido --Serrajero
 		}
-		
-		////Metodos para validar los tipos de datos --CuateAntraz
-		
-		//Metodos para validar los valores por medio de una cadena --CuateAntraz
+		return to;
 	}
+	return vacio;
+//Metodos para validar los valores por medio de una cadena
+public static boolean isNumeric(String cadena) {
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	}catch(NumberFormatException nfe) {
+		return false;
+	}
+}
+public static boolean isFloat(String cadena) {
+	try {
+		Float.parseFloat(cadena);
+		return true;
+	}catch(NumerFormatException nfe) {
+		return false;
+		
+	}
+}
+	public static boolean isDouble(String cadena) {
+		try {
+			Double.parseDouble(cadena);
+			return true;
+		}catch(NumberFormatException nfe) {
+			return false;
+		}
+	}
+	public static boolean isBoolean(String cadena) {
+		if(cadena.equals("true"))||cadena.equals("false")){
+			return true;
+		}
+		return false;
+	}
+		
+		////Por si alguien escribe todo pegado
+
+		
 	public String separaDelimitadores(String linea){
 		for (String string : Arrays.asList("(",")","{","}","=",";")) {
 			if(string.equals("=")) {
@@ -282,9 +341,18 @@ public class Analizar
 		}	
 		return conta;
 	}
+	//metodo para saber el tipo de dato
+	public String TipoDato(String aux) {
+		if(pattern.matches("[0-9]+",aux))
+			return "int";
+		if(Pattern.matches("[0-9+.[0-9]",aux))
+			return "float";
+		if(pattern.macthes("true+",aux))
+			return "boolean";
+	}
 	public ArrayList<String> getmistokens() {
 		return impresion;
 	}
-	//Cuenta y Tipo de dato --CuateAntrax
+	
 	
 }
