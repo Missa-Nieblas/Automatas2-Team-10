@@ -14,9 +14,14 @@ public class Analizar
 	ArrayList<String> aux = new ArrayList<String>();
 	final Token vacio=new Token("", 9,0);
 	boolean bandera=true;
+	ArrayList<Arbol> arbol = new ArrayList<Arbol>();
+	ArrayList<String> expresion = new ArrayList<String>();
 
 	public ArrayList<Identificador> getIdenti() {
 		return identi;
+	}
+	public ArrayList<Arbol> getIdenti2() {
+		return arbol ;
 	}
 	public Analizar(String ruta) {//Recibe el nombre del archivo de texto
 		analisaCodigo(ruta);
@@ -95,8 +100,80 @@ public class Analizar
 					break;
 			case Token.SIMBOLO:
 				// Verificar que el mismo numero de parentesis y llaves que abren sean lo mismo que los que cierran
-				if(to.getValor().equals("}")) 
-				{
+				if(to.getValor().equals(";")){
+					int aux=0;
+					boolean bandera=false;
+					//Recorridos de los arboles
+					if ((nodo.anterior.anterior.anterior.anterior.dato.getTipo()==Token.CONSTANTE 
+							&& nodo.anterior.anterior.anterior.dato.getTipo()==Token.OPERADOR_ARITMETICO && nodo.anterior.anterior.dato.getTipo()==Token.CONSTANTE && nodo.dato.getValor().contains(")"))  ||
+							(nodo.anterior.anterior.anterior.anterior.dato.getTipo()==Token.CONSTANTE && nodo.anterior.anterior.anterior.dato.getTipo()==Token.SIMBOLO && nodo.anterior.anterior.dato.getTipo()==Token.OPERADOR_ARITMETICO
+							&& nodo.anterior.dato.getTipo()==Token.CONSTANTE) || (nodo.anterior.anterior.anterior.dato.getTipo()==Token.CONSTANTE  && nodo.anterior.anterior.dato.getTipo()==Token.OPERADOR_ARITMETICO
+							&& nodo.anterior.dato.getTipo()==Token.CONSTANTE)){
+
+						NodoDoble<Token> nodoaux = nodo;
+						NodoDoble<Token> nodoaux2 = nodo;
+						NodoDoble<Token> nodoaux3 = nodo;
+						while(nodoaux!=null){
+							String aux2 = nodoaux.anterior.dato.getValor();
+							if(aux2.contains("="))
+								break;
+
+							nodoaux = nodoaux.anterior;
+						}
+
+
+						while(nodoaux!=null){
+							String aux2 = nodoaux.dato.getValor();
+							if(aux2.contains(";"))
+								break;
+
+							expresion.add(aux2);
+							nodoaux = nodoaux.siguiente;
+						}
+
+
+						ArrayList<String> expresion2 = new ArrayList<String>(expresion);
+						int Resultado=0;
+						int contador =1;
+						
+						//Primero revisa si la Expresion tiene parentesis
+						for (int i = 0; i < expresion.size(); i++) {
+							if(expresion.get(i).contains("(") ){
+								if (expresion.get(i).contains("(")){
+									int aux5 = i;
+									int aux6 = 0 ;
+									boolean banderaParentesis = false;
+
+									for (int j = 0; j < expresion.size(); j++) {
+										if(expresion.get(j).contains(")")){
+											aux6 = j;
+											break;
+										}
+									}
+
+									while(!banderaParentesis){
+										for (int j = aux5; j < aux6; j++) {
+											if(expresion.get(j).contains("/")){
+												Resultado =  dividir(expresion.get(j-1), expresion.get(j+1));
+												expresion2.set(j,"temporal"+contador);
+												arbol.add(new Arbol("/",expresion2.get(j-1),expresion2.get(j+1),expresion2.get(j)));
+												expresion2.remove(j+1);
+												expresion2.remove(j-1);
+
+												expresion.set(j,Resultado+"" );
+												expresion.remove(j+1);
+												expresion.remove(j-1);
+
+												aux6 = aux6 - 2;
+												contador++;
+											}
+						//Hacer Multiplicacion --Cerra o CuateAntrax
+						//Hacer la Suma --Cerra o CuateAntrax
+						//Hacer Resta --Cerra o Cuate
+						//Hacer la Division --CerrA O Cuate
+						//Hacer Variables y otras cosas :b
+					    
+						//Continuan los signos
 					if(cuenta("{")!=cuenta("}"))
 						impresion.add("Error sinatactico en la linea "+to.getLinea()+ " falta un {");
 				}else if(to.getValor().equals("{")) {
@@ -123,19 +200,11 @@ public class Analizar
 							impresion.add("Error sinatactico en la linea "+to.getLinea()+ " se esperaba una constante");
 						else {
 							if(nodo.anterior.anterior.dato.getTipo()==Token.TIPO_DATO)
-								identi.add(new Identificador(nodo.anterior.dato.getValor(),nodo.siguiente.dato.getValor(),nodo.anterior.anterior.dato.getValor()));			
-						}
-					}else
+								
 							//Por si se llega a repetir
 							if(cuenta(nodo.anterior.dato.getValor())>=2) {
 								
-							}else {
-								//Por si se pierde una variable declarada
-								if(cuenta(nodo.anterior.dato.getValor())<2) {
-									impresion.add("Error sinatactico en linea "+to.getLinea()+ " variable no declarada");
-								}else {
-									impresion.add("Error sinatactico en linea "+to.getLinea()+ " se esperaba un tipo de dato");
-								}
+							
 							}
 					}else 
 				impresion.add("Error sinatactico en linea "+to.getLinea()+ " se esperaba un identificador");
@@ -172,16 +241,16 @@ public class Analizar
 			case Token.OPERADOR_LOGICO:
 				// verificar que sea  'numero' + 'operador' + 'numero' 
 				if(nodo.anterior.dato.getTipo()!=Token.CONSTANTE) 
-					impresion.add("Error sinatactico en linea "+to.getLinea()+ " se esperaba una constante");
+					impresion.add("Error semantico en linea "+to.getLinea()+ " se esperaba una constante");
 				if(nodo.siguiente.dato.getTipo()!=Token.CONSTANTE)
-					impresion.add("Error sinatactico en linea "+to.getLinea()+ " se esperaba una constante");
+					impresion.add("Error semantico en linea "+to.getLinea()+ " se esperaba una constante");
 				break;
 				
 			case Token.OPERADOR_ARITMETICO:
 				if(nodo.anterior.dato.getTipo()!=Token.CONSTANTE) 
-					impresion.add("Error sinatactico en linea "+to.getLinea()+ " se esperaba una constante");
+					impresion.add("Error semantico en linea "+to.getLinea()+ " se esperaba una constante");
 				if(nodo.siguiente.dato.getTipo()!=Token.CONSTANTE)
-					impresion.add("Error sinatactico en linea "+to.getLinea()+ " se esperaba una constante");
+					impresion.add("Error semantico en linea "+to.getLinea()+ " se esperaba una constante");
 
 				String aux1="", aux2="";
 				aux1 = TipoDato(nodo.anterior.dato.getValor());
@@ -213,7 +282,7 @@ public class Analizar
 			tipo = Token.OPERADOR_LOGICO;
 		else if(Arrays.asList("+","-","*","/").contains(token))
 			tipo = Token.OPERADOR_ARITMETICO;
-		else if(Arrays.asList("true","false").contains(token)||Pattern.matches("^\\d+$",token)) 
+		else if(Arrays.asList("true","false").contains(token)||Pattern.matches("^\\d+$",token)||Pattern.matches("[0-9]+.[0-9]+",token)||Pattern.matches("-[0-9]+$",token)  )
 			tipo = Token.CONSTANTE;
 		else if(token.equals("class")) 
 			tipo =Token.CLASE;
@@ -294,6 +363,7 @@ public class Analizar
 	}
 	return vacio;
 	}
+	//Hacer Metodos para realizar las operaciones del arbol
 //Metodos para validar los valores por medio de una cadena
 public static boolean isNumeric(String cadena) {
 	try {
