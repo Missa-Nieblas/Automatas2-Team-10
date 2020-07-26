@@ -166,12 +166,121 @@ public class Analizar
 
 												aux6 = aux6 - 2;
 												contador++;
+													
+												
 											}
-						//Hacer Multiplicacion --Cerra o CuateAntrax
-						//Hacer la Suma --Cerra o CuateAntrax
-						//Hacer Resta --Cerra o Cuate
-						//Hacer la Division --CerrA O Cuate
-						//Hacer Variables y otras cosas :b
+						// Multiplicacion
+				if(expresion.get(j).contains("*")) {
+					resultado= multiplicar(expresion.get(j-1), expresion.get(j+1));
+					expresion2.set(j,"temporal"+contador);
+					
+					arbol.add(new Arbol("*",expresion2.get(j-1,expresion2.get(j+1),exprecion2.get(j))));
+					expresion2.remove(j+1);
+					expresion2.remove(j-1);
+					aux6 = aux6 -2;
+					
+					contador++;
+				}
+						//Suma
+				if (expresion.get(1+2).contains("+")) {
+					resultado= sumar(expresion.get(i+1),expresion.get(1+3));
+					expresion2.set(1+2,"temporal"+contador);
+					arbol.add(new arbol("+",expresion2.get(i+1),expresion2.get(1+3),expresion2.get(1+2)));
+					expresion2.remove(1+3);
+					expresion2.remove(1+1);
+					
+					expresion.set(i+1,resultado+"");
+					exresion.remove(1+2);
+					expresion.remove(i+2);
+					contador++;
+				}
+						//Resta
+				if(expresion.get(1+2).contains("-")) {
+					Resultado = restar(expresion.get(i+1),expresion.get(1+3));
+					expresion2.set(i+2,"temporal"+contador);
+					arbol.add(new Arbol("-",expresion2.get(i+1),expresion2.get(i+3),expresion2.get(i+2)));
+					expresion2.remove(i+3);
+					expresion2.remove(i+1);
+					
+					expresion.set(i+1,resultado+"" );
+					expresion.remove(i+2);
+					expresion.remove(i+2);
+					contador++;
+				}
+				if(expresion.get(i+2).contains(")")) {
+					expresion.remove(i+2);
+					expresion.remove(i);
+					expresion2.remove(i+2);
+					expresion2.remove(i);
+					banderaParentesis= true;
+				}
+				//checa los parentesis qat
+				//Division
+				for(int i=0;i< expresion.size();i++) {
+					if(expresion.get(i).contains("/")){
+						Resultado = dividr(expresion.get(i-1),expresion.get(i+1));
+						expresion2.set(i,"temporal"+contador);
+						arbol.add(new Arbol("/",expresion2.get(i-1),expresion2.get(i+1),expresion2.get(i)));
+						expresion2.remove(i+1);
+						expresion2.remove(i-1);
+						
+						expresion.set(i-1,resultado+"");
+						expresion.remove(i);
+						expresion.remove(i);
+						i--;
+						contador++;
+					}
+					else if(expresion.get(i).contains("*")|| expresion.get(i).contains("/")) {
+						if(expresion.get(i).contains("*")) {
+							resultado = multiplicar(expresion.get(i-1),expresion.get(i+1));
+							expresion2.set(i,"temporal"+contador);
+							arbol.add(new arbol("*",expresion2.get(i-1),expresion2.get(i+1),expresion2.get(i)));
+							
+							expresion2.remove(i+1);
+							expresion2.remove(i-1);
+							expresion.set(i-1,resultado+"");
+							expresion.remove(i);
+							expresion.remove(i);
+							i--;
+							contador++;
+						}
+					}
+						
+					}
+				for (int i=0;i<expresion.size();i++) {
+					if(expresion.get(i).contains("+")) {
+						Resutado= Sumar(expresion.get(i-1),expresion.get(i+1));
+						expresion2.set(i,"temporal"+contador);
+						arbol.add(new Arbol("+",expresion2.get(i-1),expresion2.get(i+1),expresion2.get(i)));
+						
+						expresion2.remove(i+1);
+						expresion2.reomove(i-1);
+						expresion.set(i-1);
+						expresion.set(i-1,Resultado+"");
+						expresion.remove(i);
+						expersion.remove(i);
+						i--;
+						contador++;
+					}
+					else if(expresion.get(i).contains("-")) {
+						if(expresion.get(i).contains("-")) {
+							Resultado= restar(expresion.get(i-1),expresion.get(i+1));
+							expresion2.set(i,"temporal"+ocntador);
+							arbol.add(new Arbol("-",expresion2.get(i-1),expresion2.get(i+1),expresion2.get(i)));
+							
+							expresion2.remove(i+1);
+							expresion2.reomove(i-1);
+							
+							expresion.set(i-1,Resultado+"");
+							expresion.remove(i);
+							expresion.remove(i);
+							i--;
+							contador++;
+						}
+					}
+				}
+				}
+						//Hacer Variables y otras cosas :b-- cuate antrax
 					    
 						//Continuan los signos
 					if(cuenta("{")!=cuenta("}"))
