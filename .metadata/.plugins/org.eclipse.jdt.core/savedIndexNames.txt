@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\Users\lalo9\OneDrive\Escritorio\el prron\Automatas2-Team10\.metadata\.plugins\org.eclipse.jdt.core
+1067094681.index

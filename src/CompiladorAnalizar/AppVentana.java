@@ -42,17 +42,14 @@ public class AppVentana  extends JFrame implements ActionListener {
 		public JTable mitabla2 = new JTable(modelo2);
 		private JButton btnAnalizar;
 		public static void main(String[] args) {
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (Exception e) {
-			}
+			
 			new AppVentana();
 		}
 		public AppVentana() {
-			super("Compilador Lexico, Sintactico y Semantico");
+			super("Compilador Lexico, Sintactico y Semantico xd");
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setLayout(new GridLayout(3,2));
-			mitabla.setBackground(new Color(255,45,0));
+			//mitabla.setBackground(new Color(255,45,0));
 			setSize(1000,550);
 			setResizable(false);
 			
@@ -91,6 +88,7 @@ public class AppVentana  extends JFrame implements ActionListener {
 			
 			barraMenu.add(menuArchivo);
 			areaTexto = new JTextArea();
+			
 			ventanaArchivos= new JFileChooser("Guardar");
 			areaTexto.setFont(new Font("Consolas", Font.PLAIN, 12));
 			barra = new JScrollPane(areaTexto);
@@ -113,7 +111,7 @@ public class AppVentana  extends JFrame implements ActionListener {
 			add(tabla2);
 			add(btnAnalizar);
 			add(tabla);
-			documentos.add("Analizar", btnAnalizar);
+			//documentos.add("Analizar", btnAnalizar);
 
 		}
 		@Override
@@ -168,6 +166,7 @@ public class AppVentana  extends JFrame implements ActionListener {
 				guardar();
 			}
 		}
+	}
 		public boolean guardar() {
 			try {
 				if(archivo==null) {
@@ -205,5 +204,9 @@ public class AppVentana  extends JFrame implements ActionListener {
 				return false;
 			}
 		}
-
 }
+/* 
+public class prueba{
+int x=3+5*3;
+}
+*/

@@ -11,7 +11,7 @@ public class Identificador {
 	String alcance;
 	int posicion;
 
-	public Identificador(String nombre, String valor, String tipo) {
+	public Identificador(String nombre, String valor, String tipo,String alcance,int posicion) {
 		super();
 		this.nombre = nombre;
 		this.valor = valor;
